@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css";
 const position = [1.9422957087636317, -27.91002939455943];
 
 function Map({ onClick }) {
-  const [activePolygon, setActivePolygon] = useState(["Niger", "#F09536"]);
+  const [activePolygon, setActivePolygon] = useState(["NER", "#F09536"]);
   const { data, error, isLoading } = useFetchIPCQuery();
   const header = useSelector((state) => state.header.id);
 
@@ -19,7 +19,7 @@ function Map({ onClick }) {
     if (header === 0) {
       return activePolygon[0] === poly ? activePolygon[1] : "rgb(24,140,179)";
     } else {
-      const peak = data.ipc_peaks.find((peak) => peak.country_name === poly);
+      const peak = data.ipc_peaks.find((peak) => peak.iso3 === poly);
       if (!peak) return "rgb(24,140,179)";
 
       const percent = peak.phase_3_percent;
@@ -31,9 +31,9 @@ function Map({ onClick }) {
     return "rgb(24,140,179)";
   };
 
-  const handleClick = (e) => {
-    onClick(e);
-    setActivePolygon([e, "#F09536"]);
+  const handleClick = (admin,iso_a3) => {
+    onClick(admin,iso_a3);
+    setActivePolygon([iso_a3, "#F09536"]);
   };
 
   const handleZoom = () => {
@@ -61,12 +61,12 @@ function Map({ onClick }) {
             item[1],
             item[0],
           ]);
-          const { admin } = country.properties;
-          const fillColor = handleColor(admin);
+          const { iso_a3, admin } = country.properties;
+          const fillColor = handleColor(iso_a3);
 
           return (
             <Polygon
-              key={admin}
+              key={iso_a3}
               pathOptions={{
                 fillColor,
                 fillOpacity: 0.7,
@@ -95,7 +95,7 @@ function Map({ onClick }) {
                     color: "black",
                   });
                 },
-                click: () => handleClick(admin),
+                click: () => handleClick(admin,iso_a3),
               }}
             >
               <Tooltip

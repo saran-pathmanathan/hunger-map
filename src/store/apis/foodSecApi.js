@@ -30,10 +30,26 @@ const foodSecApi = createApi({
                         method: 'GET',
                     }
                 }
-            })
+            }),
+            fetchFcs: builder.mutation({
+                query: (country) => {
+                    return {
+                        url: `v1/foodsecurity/country/${country}`,
+                        method: 'GET',
+                    }
+                }
+            }),
+            fetchNdvi: builder.query({
+                query: (country) => {
+                    return {
+                        url: `v2/climate/country`,
+                        method: 'GET',
+                    }
+                }
+            }),
         }
     }
 })
 
-export const { useFetchIPCQuery, useFetchHazardQuery, useFetchInfoQuery } = foodSecApi;
+export const { useFetchIPCQuery, useFetchHazardQuery, useFetchInfoQuery, useFetchFcsMutation , useFetchNdviQuery} = foodSecApi;
 export { foodSecApi };
