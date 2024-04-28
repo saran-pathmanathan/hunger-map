@@ -1,0 +1,105 @@
+.header {
+  background-color: $color-primary;
+  color: $color-white;
+  padding: 1rem;
+}
+
+.menu {
+  height: 100%;
+  background-color: black;
+  padding: 0;
+  &__label:link,
+  &__label:visited {
+    color: $color-white;
+    text-decoration: none;
+    display: block;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+
+    @media only screen and (max-width: $bp-medium) {
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    @media only screen and (max-width: $bp-small) {
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+
+    @media only screen and (max-width: $bp-large) {
+      flex-direction: row;
+    }
+  }
+
+  &__item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0.3rem;
+    background-color: $color-primary;
+    transform: scaleY(0);
+    transition: transform 0.2s, width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s,
+      background-color 0.1s;
+  }
+  &__item:hover::before,
+  &__item--active::before {
+    transform: scaleY(1);
+    width: 100%;
+  }
+  &__item {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    color: $color-white;
+    padding: 10px 25px;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    @media only screen and (max-width: $bp-medium) {
+      padding: 0rem;
+    }
+    &:first-child::before {
+      transform-origin: top;
+    }
+
+    &:last-child::before {
+      transform-origin: bottom;
+    }
+    @media only screen and (max-width: $bp-large) {
+      font-size: 90%;
+    }
+    @media only screen and (max-width: $bp-small) {
+      padding: 0;
+    }
+  }
+
+  &__title {
+    margin: 0;
+
+    &__active {
+      display: flex;
+      color: $color-white;
+      background-color: $color-primary;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        color: $color-white !important;
+      }
+    }
+  }
+
+  &__icon {
+    // color: white;
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+}
