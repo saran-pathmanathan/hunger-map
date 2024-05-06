@@ -43,6 +43,19 @@ function Map({ onClick }) {
 
   return (
     <section className="map__container">
+   {header === 2 || header === 3 ? (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh', 
+        backgroundColor: '#000', 
+        color: '#fff', 
+        fontSize: '2em' 
+      }}>
+        <h1>Future Enhancement</h1>
+      </div>
+    ) : (
       <MapContainer
         dragging={false}
         center={position}
@@ -109,7 +122,7 @@ function Map({ onClick }) {
             </Polygon>
           );
         })}
-      </MapContainer>
+      </MapContainer>)}
     </section>
   );
 }

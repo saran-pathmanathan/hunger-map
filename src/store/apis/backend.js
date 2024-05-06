@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const backendApi = createApi({
     reducerPath: 'prediction',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://ml-ajkk2vma5q-uc.a.run.app'
+        baseUrl: 'https://ml-ajkk2vma5q-ew.a.run.app'
     }),
     endpoints(builder) {
         return {
@@ -19,9 +19,21 @@ const backendApi = createApi({
                     }
                 }
             }),
+            fetchPlot: builder.mutation({
+                query: (body) => {
+                    return {
+                        url: '/plot',
+                        method: 'POST',
+                        body: JSON.stringify(body),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                }
+            }),
         }
     }
 })
 
-export const { useFetchPredictionMutation } = backendApi;
+export const { useFetchPredictionMutation, useFetchPlotMutation } = backendApi;
 export { backendApi };

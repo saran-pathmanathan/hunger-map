@@ -7,7 +7,6 @@ import { changeCountry, countryReducer , changeISO3} from './slice/countrySlice'
 import { payloadReducer, setPopulation, setIncomeGroup, setIpc, setFcs, setRcsi, setRainfall, setNdvi } from './slice/payloadSlice';
 
 
-
 export const store = configureStore({
     reducer: {
         header: headerReducer,
@@ -26,5 +25,5 @@ export const store = configureStore({
 setupListeners(store.dispatch)
 
 export { useFetchIPCQuery, useFetchInfoQuery, useFetchHazardQuery, useFetchFcsMutation,useFetchNdviQuery } from './apis/foodSecApi'
-export { useFetchPredictionMutation } from './apis/backend'
+export { useFetchPredictionMutation , useFetchPlotMutation} from './apis/backend'
 export { headerChange, changeCountry , changeISO3,setPopulation, setIncomeGroup, setIpc, setFcs, setRcsi, setRainfall, setNdvi }

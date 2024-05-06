@@ -3,15 +3,17 @@ import Map from './views/Page/Map';
 import './styles/Main.scss';
 import Header from './views/Page/Header';
 import Menu from './views/Page/Menu';
+
 import Dashboard from './views/Page/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCountry, changeISO3 } from './store';
 import { africa_shape } from './views/Graphs/africa';
-
+import Chart from './views/Page/Chart';
 
 function App() {
   const dispatch = useDispatch();
   const country = useSelector((state) => state.country);
+  const header = useSelector((state) => state.header.id);
   const africaMap = africa_shape.features.map((feature) => feature.properties.admin);
   const handleCountryChange = (selectedCountry, selectedISO3) => {
     dispatch(changeCountry(selectedCountry))
@@ -31,9 +33,8 @@ function App() {
         <nav className='app__menu'>
           <Menu />
         </nav>
-        <main className='app__dashboard'>
-          <Dashboard country={country.id} iso3={country.iso3}/>
-        </main>
+         {header === 0 && <main className='app__dashboard'><Dashboard country={country.id} iso3={country.iso3}/></main> }
+         {header === 1 && <main className='app__dashboard'><Chart country={country.id} iso3={country.iso3}/></main> }
         <main className='app__map'>
           <Map africaMap={africaMap} onClick={handleCountryChange} />
         </main>
