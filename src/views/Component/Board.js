@@ -12,11 +12,13 @@ import { useFetchPlotMutation } from '../../store';
 import Bar from '../Graphs/Bar';
 
 import mali from '../../../src/image/mali.jpeg' 
+import axios from 'axios';
 
 export default function Board({country, predictionData,payload, dataLoading,allDataLoaded }) {
   const [imageUrl, setImageUrl] = React.useState('');
   const [generatePdf, setGeneratePdf] = React.useState(false);
-  const [fetchPlot, { data: plotData, error: plotError, isLoading: plotIsLoading }] = useFetchPlotMutation();
+  const [plotData, setPlotData] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     fetch(`https://api.unsplash.com/search/photos?query=${country}&client_id=KfkAVWhOcEARRzTqmec03SVLy_7gbXMcbogXl_X18aE`)
@@ -29,24 +31,8 @@ export default function Board({country, predictionData,payload, dataLoading,allD
   }, [country]);
 
   React.useEffect(() => {
-    if (allDataLoaded && generatePdf && !dataLoading) {
-      const data = {
-        "population": payload.population,
-        "fcs": payload.fcs,
-        "rcsi": payload.rcsi,
-        "rainfall": payload.rainfall,
-        "index": predictionData[0],
-        "country": country
-      }
-      fetchPlot(data);
-    } 
-  }, [generatePdf]);
-
-  React.useEffect(() => {
-    if (plotData) {
-      setGeneratePdf(true);
-    }
-  }, [plotData]);
+    setGeneratePdf(false);
+  }, [country]);
 
   const visualizationData = {
     population: payload.population,
@@ -66,15 +52,24 @@ export default function Board({country, predictionData,payload, dataLoading,allD
   };
 
   const handleClick = () => {
-    const data = {
-      "population": payload.population,
-      "fcs": payload.fcs,
-      "rcsi": payload.rcsi,
-      "rainfall": payload.rainfall,
-      "index": predictionData[0],
-      "country": country
-    }
-    fetchPlot(data);
+    setLoading(true);
+    axios.post('https://ml-ajkk2vma5q-ew.a.run.app/plot', {
+      population: payload.population,
+      fcs: payload.fcs,
+      rcsi: payload.rcsi,
+      rainfall: payload.rainfall,
+      index: predictionData[0],
+      country: country
+    })
+      .then(response => {
+        setPlotData(response.data);
+        console.log(plotData)
+        setGeneratePdf(true);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   return (
@@ -124,17 +119,16 @@ export default function Board({country, predictionData,payload, dataLoading,allD
       </CardContent>
         <Bar data={visualizationData} />
 <CardActions>
-  {generatePdf && plotData ? (
+  {generatePdf && plotData !== null  ? (
     <PDFDownloadLink 
       document={<PDF country={country} data={plotData} />} 
       fileName={`${country}_Analysis_Report.pdf`}
-      onContextMenu={() => setGeneratePdf(false)}
     >
       {({ blob, url, loading, error }) =>
-        loading ? <Button disabled={true} size="large">Generate PDF</Button> : <Button onClick={() => setGeneratePdf(false)} size="large">Download PDF</Button>
+        loading ? <Button disabled={true} size="large">Generate PDF</Button> : <Button size="large">Download PDF</Button>
       }
     </PDFDownloadLink>
-  ) : <Button disabled={dataLoading} onClick={handleClick} size="large">Generate PDF</Button>
+  ) : <Button disabled={loading} onClick={handleClick} size="large">Generate PDF</Button>
   }
 </CardActions>
     </Card>

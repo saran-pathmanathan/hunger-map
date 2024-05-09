@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDF = ({data, country, isLoading}) => {
+const PDF = ({data, country}) => {
 
   return (
     <Document>

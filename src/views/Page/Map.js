@@ -109,6 +109,7 @@ function Map({ onClick }) {
                   });
                 },
                 click: () => handleClick(admin,iso_a3),
+                zoom: () => console.log("heyy")
               }}
             >
               <Tooltip
